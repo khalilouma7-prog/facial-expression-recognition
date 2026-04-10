@@ -1,7 +1,7 @@
 import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, Activation, BatchNormalization
 
 # path du dataset
 train_dir = "archive/train"
@@ -10,6 +10,7 @@ test_dir = "archive/test"
 # paramètres
 img_size = 48
 batch_size = 32
+num_classes = 7  # 7 emotions: angry, disgust, fear, happy, neutral, sad, surprise
 
 # Augmentation pour l'entraînement (le modèle devient plus "robuste")
 train_datagen = ImageDataGenerator(
@@ -45,10 +46,10 @@ model = Sequential()
 
 # Block-1
 
-model.add(Conv2D(32,(3,3),padding='same',kernel_initializer='he_normal',input_shape=(img_rows,img_cols,1)))
+model.add(Conv2D(32,(3,3),padding='same',kernel_initializer='he_normal',input_shape=(img_size,img_size,1)))
 model.add(Activation('elu'))
 model.add(BatchNormalization())
-model.add(Conv2D(32,(3,3),padding='same',kernel_initializer='he_normal',input_shape=(img_rows,img_cols,1)))
+model.add(Conv2D(32,(3,3),padding='same',kernel_initializer='he_normal'))
 model.add(Activation('elu'))
 model.add(BatchNormalization())
 model.add(MaxPooling2D(pool_size=(2,2)))
